@@ -8,7 +8,7 @@ const Navbar = () => {
     return (
         <div className='shadow-2xl'>
             <div className='mainContainer'>
-                <nav className={`${styles.navContainer} px-4`}>
+                <nav className={`${styles.navContainer} px-[2rem]`}>
                     <ul>
                         <Link href={"/"} className='text-2xl uppercase font-bold'>Icon</Link>
                     </ul>

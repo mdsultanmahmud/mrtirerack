@@ -6,7 +6,7 @@ import { FaFacebook, FaInstagram } from 'react-icons/fa'
 const Footer = () => {
     return (
         <div>
-            <div className='mainContainer px-4 py-8'>
+            <div className='mainContainer px-[2rem] py-8'>
                 <footer className="grid gap-12 grid-cols-1 md:grid-cols-3 text-black">
                     <div>
                         <h1 className="text-black text-xl uppercase font-semibold mb-4">Amazon Associates Program</h1>
