@@ -11,3 +11,20 @@ body{
     max-width: 1400px;
     margin: 0 auto;
 }
+
+.globalBtn{
+    color: #e6c87f;
+    border: 1px solid#e6c87f;
+    padding: 0.5rem 1rem;
+    border-radius: 1rem;
+    cursor: pointer;
+    transition: all ease-in-out 0.3s;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+.globalBtn:hover{
+    background-color: #e6c87f;
+    color: white;
+}
