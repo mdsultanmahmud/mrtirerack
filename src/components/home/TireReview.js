@@ -100,7 +100,7 @@ const TireReview = () => {
         },
     ]
     return (
-        <div className='bgImage'>
+        <div className='bgImage' style={{backgroundImage:`url(${bgImage})`}}>
             <div className='bg-[rgba(0,0,0,0.6)]'>
                 <div className='mainContainer'>
                     <div className={`py-[4rem] px-[2rem]`}>

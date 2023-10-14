@@ -18,7 +18,7 @@ export default function HomePage() {
       <div>
         <Banner />
         <LearnAndHow />
-        <TireReview />
+        {/* <TireReview /> */}
         <BestTire />
       </div>
     </>

@@ -13,10 +13,11 @@ const Navbar = () => {
                         <Link href={"/"} className='text-2xl uppercase font-bold'>Icon</Link>
                     </ul>
                     <ul>
+                        
                         <li><Link href={"tricks"}>Learn & How To</Link></li>
-                        <li><Link href={"review"}>Tire Review</Link></li>
+                        {/* <li><Link href={"review"}>Tire Review</Link></li> */}
                         <li><Link href={"best-tire"}>Best Tires</Link></li>
-                        <div>
+                        {/* <div>
                             <input hidden={!search} autoFocus />
                             {
                                 !search ?
@@ -24,7 +25,7 @@ const Navbar = () => {
                                     :
                                     <RxCross1 size={24} className='cursor-pointer' onClick={() => setSearch(false)} />
                             }
-                        </div>
+                        </div> */}
                     </ul>
                 </nav>
             </div>
