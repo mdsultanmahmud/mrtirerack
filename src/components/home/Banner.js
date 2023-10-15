@@ -53,11 +53,11 @@ const Banner = () => {
                                                     <button type='submit' className='text-white'><AiOutlineSearch size={24} /></button>
                                                 </div>
                                             </form>
-                                            <div className='mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
-                                                <Link href={"/review"} className='relative '>
+                                            <div className='mt-8 grid grid-cols-1 md:grid-cols-2 gap-12'>
+                                                {/* <Link href={"/review"} className='relative '>
                                                     <Image src={tireR} alt='review image' width={200} height={200} className='h-[200px] w-full' />
                                                     <h2 className='absolute top-0 left-0 grid place-items-center h-full w-full bg-[rgba(0,0,0,0.2)] text-4xl text-white'><span>#Review</span></h2>
-                                                </Link>
+                                                </Link> */}
                                                 <Link href={"/best-tire"} className='relative'>
                                                     <Image src={tireR} alt='review image' width={200} height={200} className='h-[200px] w-full' />
                                                     <h2 className='absolute top-0 left-0 grid place-items-center h-full w-full bg-[rgba(0,0,0,0.2)] text-4xl text-white'><span>#List</span></h2>

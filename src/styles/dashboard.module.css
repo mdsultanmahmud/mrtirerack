@@ -1,0 +1,14 @@
+.sidebarContentContainer{
+    display: flex;
+}
+
+.sidebar{
+    background-color: #051647;
+    width: 300px;
+    padding: 1rem;
+}
+
+.contentContainer {
+    width: var(100% - 300px);
+    padding: 1rem;
+}

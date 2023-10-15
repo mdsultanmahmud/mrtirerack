@@ -5,7 +5,7 @@ const BlogDetails = () => {
     const router = useRouter()
     return (
         <div>
-            <h1>This is our {router.query.tricksDetails} no blog details page!!</h1>
+            <h1>This is our {router.query.tricksDetails} tricks details post!!</h1>
         </div>
     );
 };
