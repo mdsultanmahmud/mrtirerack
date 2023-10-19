@@ -17,6 +17,7 @@ const Navbar = () => {
                         <li><Link href={"/tricks"}>Learn & How To</Link></li>
                         {/* <li><Link href={"review"}>Tire Review</Link></li> */}
                         <li><Link href={"/best-tire"}>Best Tires</Link></li>
+                        <li><Link href={"/dashboard/learn-how-to"}>Dashboard</Link></li>
                         {/* <div>
                             <input hidden={!search} autoFocus />
                             {
