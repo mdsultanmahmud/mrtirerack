@@ -1,9 +1,10 @@
+import BlogTable from '@/components/dashboard/BlogTable';
 import DashboardLayout from '@/components/layout/DashboardLayout';
 import Head from 'next/head';
 import Image from 'next/image';
 import React, { useEffect, useRef, useState } from 'react';
 import { BsImageFill } from 'react-icons/bs'
-const BestTireDashboard = ({allBestTires}) => {
+const BestTireDashboard = ({ allBestTires }) => {
     const [inputList, setInputList] = useState([{ title: "", details: "", img: "" }])
     const [mainHeading, setMainHeading] = useState('')
     const [shortDetails, setShortDetails] = useState('')
@@ -11,25 +12,12 @@ const BestTireDashboard = ({allBestTires}) => {
     const [selectedImage, setSelectedImage] = useState(null);
     const [subItem, setSubItem] = useState(false)
     const [addItem, setAddItem] = useState(false)
-
-    console.log("our all tires is", allBestTires)
-
     const handleInputChange = (e, index) => {
         const { name, value } = e.target
         const list = [...inputList]
         list[index][name] = value
         setInputList(list)
     }
-
-
-
-
-    // const handleRemoveItem = index => {
-    //     const list = [...inputList]
-    //     list.splice(index, 1)
-    //     setInputList(list)
-    // }
-
     const handleUploadBestTire = async (e) => {
         e.preventDefault()
         const date = new Date(); // Assuming you want to format this specific date
@@ -41,10 +29,10 @@ const BestTireDashboard = ({allBestTires}) => {
             mainImgUrl,
             inputList,
             date: formattedDate,
-            authorName:"Md. Ashikur Rahman",
+            authorName: "Md. Ashikur Rahman",
             tireCate: "Learn & how to",
-            comments:[],
-            bloggerImg:"https://res.cloudinary.com/dtdlizh8h/image/upload/v1697628087/blogger_jb7inv.png"
+            comments: [],
+            bloggerImg: "https://res.cloudinary.com/dtdlizh8h/image/upload/v1697628087/blogger_jb7inv.png"
         }
         if (!bestTire) {
             return
@@ -64,7 +52,7 @@ const BestTireDashboard = ({allBestTires}) => {
             })
             .then((data) => {
                 console.log("data post successfully!")
-                
+
             })
             .catch((error) => {
                 console.log(error)
@@ -123,6 +111,27 @@ const BestTireDashboard = ({allBestTires}) => {
     const handleUpload = async (index) => {
         await imgUpload("sub-items", index)
         setAddItem(true)
+    }
+
+    const handleDeleteItem = id => {
+        const url = "http://localhost:5000/api/v1/best_tire";
+        fetch(`${url}/${id}`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+            .then((response) => {
+                if (response.ok) {
+                    alert("Item deleted successfully.");
+                } else {
+                    alert("Failed to delete item.");
+                }
+            })
+            .catch((error) => {
+                console.error("Error:", error);
+            });
+
     }
     return (
         <div>
@@ -194,6 +203,30 @@ const BestTireDashboard = ({allBestTires}) => {
                     </form>
                 </div>
             </div>
+            <div className='mt-12'>
+                <div className="overflow-x-auto">
+                    <table className="table">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Category</th>
+                                <th>Date</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {allBestTires?.map((blog) => <tr key={blog?._id}>
+                                <th>{blog?.mainHeading}</th>
+                                <td>{blog?.tireCate}</td>
+                                <td>{blog?.date}</td>
+                                <td className='cursor-pointer text-red-500' onClick={() => handleDeleteItem(blog?._id)}>Delete</td>
+                            </tr>)}
+
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
         </div>
     );
 };
@@ -207,13 +240,13 @@ BestTireDashboard.getLayout = function getLayout(page) {
 }
 
 
-export const getStaticProps = async() => {
+export const getStaticProps = async () => {
     const res = await fetch("http://localhost:5000/api/v1/best_tire")
     const data = await res.json()
     console.log(data)
     return {
         props: {
-            allBestTires: data.data 
+            allBestTires: data.data
         },
         revalidate: 10
     }
