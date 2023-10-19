@@ -30,8 +30,7 @@ const BestTireDashboard = ({ allBestTires }) => {
             inputList,
             date: formattedDate,
             authorName: "Md. Ashikur Rahman",
-            tireCate: "Learn & how to",
-            comments: [],
+            tireCate: "Best Tire",
             bloggerImg: "https://res.cloudinary.com/dtdlizh8h/image/upload/v1697628087/blogger_jb7inv.png"
         }
         if (!bestTire) {
@@ -204,6 +203,7 @@ const BestTireDashboard = ({ allBestTires }) => {
                 </div>
             </div>
             <div className='mt-12'>
+                <h4 className='font-semibold text-lg mt-8'>Our All Best Tires</h4>
                 <div className="overflow-x-auto">
                     <table className="table">
                         <thead>

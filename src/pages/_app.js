@@ -8,6 +8,7 @@ import '@/styles/globals.css'
 // }
 
 import Head from 'next/head';
+import { Toaster } from "react-hot-toast";
 
 export default function MyApp({ Component, pageProps }) {
   const getLayout = Component.getLayout || ((page) => page);
@@ -20,6 +21,7 @@ export default function MyApp({ Component, pageProps }) {
           rel="stylesheet"
         />
       </Head>
+      <Toaster />
       {getLayout(<Component {...pageProps} />)}
     </>
   );

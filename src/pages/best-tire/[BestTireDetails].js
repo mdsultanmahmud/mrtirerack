@@ -1,9 +1,9 @@
 import RootLayout from "@/components/layout/RootLayout";
 import Image from "next/image";
+import toast from "react-hot-toast";
 
-const BestTireDetailsPage = ({ tire }) => {
-    const { mainHeading, shortDetails, mainImgUrl, inputList, date, authorName, _id, comments } = tire
-    console.log(tire)
+const BestTireDetailsPage = ({ tire, allComments}) => {
+    const { mainHeading, shortDetails, mainImgUrl, inputList, date, authorName, _id, comments, tireCate } = tire
     const handleComment = e => {
         e.preventDefault()
         const target = e.target
@@ -18,13 +18,16 @@ const BestTireDetailsPage = ({ tire }) => {
             email,
             message,
             blogId: _id,
-            time: formattedDate
+            time: formattedDate,
+            status: false, 
+            category: tireCate,
+            title: mainHeading
         }
         if (!comment) {
             return
         }
-        fetch(`http://localhost:5000/api/v1/best_tire/${_id}`, {
-            method: 'PATCH',
+        fetch(`http://localhost:5000/api/v1/comments`, {
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -37,6 +40,7 @@ const BestTireDetailsPage = ({ tire }) => {
                 return response.json();
             })
             .then((data) => {
+                toast.success("Post a comment successfully!")
                 console.log("Post a comment successfully!")
                 console.log(data)
                 target.name.value = ""
@@ -73,7 +77,7 @@ const BestTireDetailsPage = ({ tire }) => {
                     <hr />
                     <h4 className="font-semibold text-2xl capitalize mt-12 mb-6">All Comments</h4>
                     {
-                        comments?.map((comment, index) => <div key={index} className="mb-6 p-4">
+                        allComments?.filter(comment => comment.status == true)?.map((comment, index) => <div key={index} className="mb-6 p-4">
                             <div className="flex items-center gap-x-4">
                                 <h4 className="text-lg text-green-500 capitalize"><strong>Name: </strong> {comment.name}</h4>
                                 <h4 className="text-lg text-green-500"><strong>Gmail: </strong> {comment.email}</h4>
@@ -101,7 +105,6 @@ BestTireDetailsPage.getLayout = function getLayout(page) {
 export const getStaticPaths = async () => {
     const res = await fetch(`http://localhost:5000/api/v1/best_tire`)
     const tires = await res.json()
-    console.log(tires)
     const paths = tires?.data?.map((tire) => ({
         params: { BestTireDetails: tire?._id },
     }))
@@ -112,9 +115,12 @@ export const getStaticProps = async (context) => {
     const { params } = context
     const res = await fetch(`http://localhost:5000/api/v1/best_tire/${params.BestTireDetails}`)
     const data = await res.json()
+    const result = await fetch(`http://localhost:5000/api/v1/comments/${params.BestTireDetails}`)
+    const comments = await result.json()
     return {
         props: {
-            tire: data.data
+            tire: data.data,
+            allComments: comments.data 
         },
         revalidate: 10
     }
