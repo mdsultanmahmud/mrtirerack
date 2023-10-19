@@ -24,11 +24,11 @@ const BestTireDashboard = ({allBestTires}) => {
 
 
 
-    const handleRemoveItem = index => {
-        const list = [...inputList]
-        list.splice(index, 1)
-        setInputList(list)
-    }
+    // const handleRemoveItem = index => {
+    //     const list = [...inputList]
+    //     list.splice(index, 1)
+    //     setInputList(list)
+    // }
 
     const handleUploadBestTire = async (e) => {
         e.preventDefault()
@@ -64,6 +64,7 @@ const BestTireDashboard = ({allBestTires}) => {
             })
             .then((data) => {
                 console.log("data post successfully!")
+                
             })
             .catch((error) => {
                 console.log(error)

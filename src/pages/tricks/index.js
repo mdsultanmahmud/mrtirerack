@@ -1,7 +1,7 @@
 import RootLayout from '@/components/layout/RootLayout';
 import React from 'react';
 import blog from '@/assets/BlogOne.webp'
-import blogger from '@/assets/BloggerOne.webp'
+import blogger from '@/assets/BloggerOne.jpg'
 import Image from 'next/image';
 import Link from 'next/link';
 const TricksTipsPage = () => {

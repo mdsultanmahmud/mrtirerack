@@ -1,6 +1,6 @@
 import React from 'react';
 import blog from '@/assets/bestTire.webp'
-import blogger from '@/assets/BloggerOne.webp'
+import blogger from "@/assets/BloggerOne.jpg"
 import ShowBlog from '../common/ShowBlog';
 import Link from 'next/link';
 const BestTire = () => {

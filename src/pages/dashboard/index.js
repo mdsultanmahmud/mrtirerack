@@ -1,30 +1,34 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { MdEmail } from 'react-icons/md'
 import { FaLock } from 'react-icons/fa'
 import { useRouter } from 'next/router';
+import Cookies from 'js-cookie';
 const Dashboard = () => {
     const router = useRouter()
     const [emailErr, setEmailErr] = useState("")
     const [passErr, setPassErr] = useState("")
+    const userPass = process.env.User_Pass
+    const userEmail = process.env.User_Email
     const handleLogin = (e) => {
         e.preventDefault()
         const target = e.target
         const email = target.email.value
         const password = target.password.value
-        if (email === "admin@gmail.com" && password == "admin") {
-            router.push("/dashboard/learn-how-to")
-        } else {
-            if (email != "admin@gmail.com" ) {
-                setEmailErr("Email is incorrect!!")
-            }else{
-                setEmailErr("")
-            }
-            if (password != "admin") {
-                setPassErr("Password is incorrect!!")
-            }else{
-                setPassErr("")
-            }
+        const user = {
+            email, password
         }
+        if (email != userEmail) {
+            setEmailErr("Email is incorrect!!")
+        } else {
+            setEmailErr("")
+        }
+        if (password != userPass) {
+            setPassErr("Password is incorrect!!")
+        } else {
+            setPassErr("")
+        }
+        Cookies.set('loggedIn', JSON.stringify(user), { expires: 7 });
+        router.push("/dashboard/learn-how-to")
     }
     return (
         <div className='min-h-screen min-w-screen bg-white grid place-items-center'>
