@@ -2,7 +2,7 @@ import RootLayout from "@/components/layout/RootLayout";
 import Image from "next/image";
 import toast from "react-hot-toast";
 
-const BestTireDetailsPage = ({ tire, allComments}) => {
+const BestTireDetailsPage = ({ tire, allComments }) => {
     const { mainHeading, shortDetails, mainImgUrl, inputList, date, authorName, _id, comments, tireCate } = tire
     const handleComment = e => {
         e.preventDefault()
@@ -19,7 +19,7 @@ const BestTireDetailsPage = ({ tire, allComments}) => {
             message,
             blogId: _id,
             time: formattedDate,
-            status: false, 
+            status: false,
             category: tireCate,
             title: mainHeading
         }
@@ -51,16 +51,34 @@ const BestTireDetailsPage = ({ tire, allComments}) => {
                 console.log(error)
             });
     }
+    console.log(inputList[0].details.includes("Pros:"))
     return (
         <div>
             <div className="mainContainer px-4">
                 <h1 className="text-[1rem] md:text-[2rem]  uppercase font-semibold mt-8">{mainHeading}</h1>
                 <p className="text-lg text-gray-700 font-semibold">By <span className="text-green-500">{authorName}</span></p>
-                <p className="my-12 text-justify text-lg">{shortDetails}</p>
+                <div className="my-12 text-justify text-lg"><strong>Details:</strong>
+                    {
+                        shortDetails.split('\n').map((paragraph, index) => <p key={index} className="mt-2">{paragraph.includes("Pros:") ? <span className="font-bold text-red-500">{paragraph}</span> : paragraph}</p>)
+                    }
+                </div>
                 {inputList?.map((item, index) => <div className="mb-12" key={index}>
                     <h2 className="text-center text-3xl font-semibold mb-4">{index + 1}. {item.title}</h2>
                     <Image src={item.img} width={500} height={500} alt="img of the tires" className="mx-auto w-full md:w-4/5 rounded-lg h-[300px] md:h-[500px] my-8" />
-                    <p className="my-12 text-justify text-lg"><strong>Details: </strong>{item.details}</p>
+                    <div className="my-12 text-justify text-lg"><strong>Details:</strong>
+                        {
+                            item.details.split('\n').map((paragraph, index) => <p key={index} className="mt-2">
+                                {paragraph.match(/Pros:|Cons:/) ? (
+                                    <span className={paragraph.includes("Pros:") ? "text-green-500 font-bold text-lg" : "text-red-500 font-bold text-lg"}>
+                                        {paragraph}
+                                    </span>
+                                ) : (
+                                    paragraph
+                                )}
+                            </p>)
+                        }
+                    </div>
+
                 </div>)
                 }
 
@@ -84,9 +102,9 @@ const BestTireDetailsPage = ({ tire, allComments}) => {
                                 <h4 className="text-lg"> By <span className="text-green-500"> {comment.time}</span></h4>
                             </div>
                             <p className="text-lg text-justify"><span className="text-xl font-semibold text-green-500">Comment: </span>{comment.message}</p>
-                            <hr className="mt-6"/>
+                            <hr className="mt-6" />
                         </div>)
-                        
+
                     }
                 </div>
             </div>
@@ -120,7 +138,7 @@ export const getStaticProps = async (context) => {
     return {
         props: {
             tire: data.data,
-            allComments: comments.data 
+            allComments: comments.data
         },
         revalidate: 10
     }
