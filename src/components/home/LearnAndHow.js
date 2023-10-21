@@ -7,94 +7,78 @@ const LearnAndHow = () => {
     const blogItems = [
         {
             id: 1,
-            title: "What Does LT Mean on a Tire?",
+            mainHeading: "What Does LT Mean on a Tire?",
             date: "September 5, 2023",
-            comments: "No Comments",
+            authorName: "Md. Ashikur Rahman",
             tireCate: "Learn & how to",
-            blogger: blogger,
-            blog: blog
+            bloggerImg: blogger,
+            mainImgUrl: blog
         },
         {
             id: 2,
-            title: "What Does LT Mean on a Tire?",
+            mainHeading: "What Does LT Mean on a Tire?",
             date: "September 5, 2023",
-            comments: "No Comments",
+            authorName: "Md. Ashikur Rahman",
             tireCate: "Learn & how to",
-            blogger: blogger,
-            blog: blog
+            bloggerImg: blogger,
+            mainImgUrl: blog
         },
         {
             id: 3,
-            title: "What Does LT Mean on a Tire?",
+            mainHeading: "What Does LT Mean on a Tire?",
             date: "September 5, 2023",
-            comments: "No Comments",
+            authorName: "Md. Ashikur Rahman",
             tireCate: "Learn & how to",
-            blogger: blogger,
-            blog: blog
+            bloggerImg: blogger,
+            mainImgUrl: blog
         },
         {
             id: 4,
-            title: "What Does LT Mean on a Tire?",
+            mainHeading: "What Does LT Mean on a Tire?",
             date: "September 5, 2023",
-            comments: "No Comments",
+            authorName: "Md. Ashikur Rahman",
             tireCate: "Learn & how to",
-            blogger: blogger,
-            blog: blog
+            bloggerImg: blogger,
+            mainImgUrl: blog
         },
         {
             id: 5,
-            title: "What Does LT Mean on a Tire?",
+            mainHeading: "What Does LT Mean on a Tire?",
             date: "September 5, 2023",
-            comments: "No Comments",
+            authorName: "Md. Ashikur Rahman",
             tireCate: "Learn & how to",
-            blogger: blogger,
-            blog: blog
+            bloggerImg: blogger,
+            mainImgUrl: blog
         },
         {
             id: 6,
-            title: "What Does LT Mean on a Tire?",
+            mainHeading: "What Does LT Mean on a Tire?",
             date: "September 5, 2023",
-            comments: "No Comments",
+            authorName: "Md. Ashikur Rahman",
             tireCate: "Learn & how to",
-            blogger: blogger,
-            blog: blog
+            bloggerImg: blogger,
+            mainImgUrl: blog
         },
         {
             id: 7,
-            title: "What Does LT Mean on a Tire?",
+            mainHeading: "What Does LT Mean on a Tire?",
             date: "September 5, 2023",
-            comments: "No Comments",
+            authorName: "Md. Ashikur Rahman",
             tireCate: "Learn & how to",
-            blogger: blogger,
-            blog: blog
+            bloggerImg: blogger,
+            mainImgUrl: blog
         },
         {
             id: 8,
-            title: "What Does LT Mean on a Tire?",
+            mainHeading: "What Does LT Mean on a Tire?",
             date: "September 5, 2023",
-            comments: "No Comments",
+            authorName: "Md. Ashikur Rahman",
             tireCate: "Learn & how to",
-            blogger: blogger,
-            blog: blog
+            bloggerImg: blogger,
+            mainImgUrl: blog
         },
-        {
-            id: 9,
-            title: "What Does LT Mean on a Tire?",
-            date: "September 5, 2023",
-            comments: "No Comments",
-            tireCate: "Learn & how to",
-            blogger: blogger,
-            blog: blog
-        },
-        {
-            id: 10,
-            title: "What Does LT Mean on a Tire?",
-            date: "September 5, 2023",
-            comments: "No Comments",
-            tireCate: "Learn & how to",
-            blogger: blogger,
-            blog: blog
-        },
+        
+        
     ]
     return (
         <div>

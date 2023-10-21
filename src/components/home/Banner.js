@@ -8,7 +8,9 @@ import HomeBannerTwo from '@/assets/HomeBanner2.jpg'
 import { AiOutlineSearch } from 'react-icons/ai'
 import tireR from '@/assets/tireReview.jpg'
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 const Banner = () => {
+    const router = useRouter()
     const banners = [
         {
             id: 1,
@@ -19,37 +21,41 @@ const Banner = () => {
             img: HomeBannerTwo
         },
         {
-            id: 2,
+            id: 3,
             img: tireR
         },
     ]
     const settings = {
         dots: false,
         infinite: true,
-        fade: true,
         speed: 500,
-        slidesToShow: 1,
+        slidesToShow: 1, 
         slidesToScroll: 1,
         autoplay: true,
         autoplaySpeed: 3000
     };
+    
+    const handleSearch = e =>{
+        e.preventDefault()
+        const search = e.target.search.value 
+        router.push(`/${search}`)
+    }
     return (
         <div>
             <div className=''>
                 <div>
-                    <Slider {...settings}>
-
+                    <Slider {...settings}>                       
                         {
                             banners.map(banner => <div key={banner.id} className='relative'>
-                                <Image className='w-[100vw] h-[100vh]' src={banner.img} width={1000} height={1000} alt='image of the banner' />
+                                <Image className='w-[100vw] h-[100vh]' src={banner.img} width={500} height={500} alt='image of the banner' />
                                 <div className='absolute top-0 left-0 bg-[rgba(0,0,0,0.7)] w-[100vw] h-[100vh] grid place-items-center'>
                                     <div className='mainContainer'>
                                         <div className='w-[70%] mx-auto text-center'>
                                             <h1 className='text-white text-[2rem] md:text-[3rem] text-green-500'>When The Rubber Hits The Road</h1>
                                             <p className='text-white text-lg'>We provide guides, tips, tricks, and reviews for some of the best tires on the market that can be had for the absolute best price.</p>
-                                            <form >
+                                            <form onSubmit={handleSearch}>
                                                 <div className='flex items-center justify-between p-4 bg-transparent border border-green-500 mt-4'>
-                                                    <input type='text' placeholder='What are you looking for?' className='text-white text-lg bg-transparent w-full outline-none' />
+                                                    <input name='search' type='text' placeholder='What are you looking for?' className='text-white text-lg bg-transparent w-full outline-none' />
                                                     <button type='submit' className='text-white'><AiOutlineSearch size={24} /></button>
                                                 </div>
                                             </form>
@@ -72,6 +78,7 @@ const Banner = () => {
                                 </div>
                             </div>)
                         }
+                        
                     </Slider>
                 </div>
             </div>
