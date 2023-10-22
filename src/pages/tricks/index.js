@@ -200,7 +200,7 @@ into you.
     return (
         <div>
             <div className='mainContainer'>
-                <div className='px-8'>
+                <div className='px-4 md:px-8'>
                     <h1 className='text-[2rem] md:text-[3rem] my-8 uppercase font-semibold'>Learn & how to</h1>
                     {
                         blogItems.map(blog => <div key={blog.id} className='mb-20'>

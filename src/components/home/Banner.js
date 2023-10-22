@@ -32,7 +32,8 @@ const Banner = () => {
         slidesToShow: 1, 
         slidesToScroll: 1,
         autoplay: true,
-        autoplaySpeed: 3000
+        autoplaySpeed: 3000,
+        arrows: false
     };
     
     const handleSearch = e =>{
@@ -50,7 +51,7 @@ const Banner = () => {
                                 <Image className='w-[100vw] h-[100vh]' src={banner.img} width={500} height={500} alt='image of the banner' />
                                 <div className='absolute top-0 left-0 bg-[rgba(0,0,0,0.7)] w-[100vw] h-[100vh] grid place-items-center'>
                                     <div className='mainContainer'>
-                                        <div className='w-[70%] mx-auto text-center'>
+                                        <div className='w-[95%] md:w-[80%] mx-auto text-center'>
                                             <h1 className='text-white text-[2rem] md:text-[3rem] text-green-500'>When The Rubber Hits The Road</h1>
                                             <p className='text-white text-lg'>We provide guides, tips, tricks, and reviews for some of the best tires on the market that can be had for the absolute best price.</p>
                                             <form onSubmit={handleSearch}>
@@ -59,17 +60,17 @@ const Banner = () => {
                                                     <button type='submit' className='text-white'><AiOutlineSearch size={24} /></button>
                                                 </div>
                                             </form>
-                                            <div className='mt-8 grid grid-cols-1 md:grid-cols-2 gap-12'>
+                                            <div className='mt-8 grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-12'>
                                                 {/* <Link href={"/review"} className='relative '>
                                                     <Image src={tireR} alt='review image' width={200} height={200} className='h-[200px] w-full' />
                                                     <h2 className='absolute top-0 left-0 grid place-items-center h-full w-full bg-[rgba(0,0,0,0.2)] text-4xl text-white'><span>#Review</span></h2>
                                                 </Link> */}
                                                 <Link href={"/best-tire"} className='relative'>
-                                                    <Image src={tireR} alt='review image' width={200} height={200} className='h-[200px] w-full' />
+                                                    <Image src={tireR} alt='review image' width={200} height={200} className='h-[100px] md:h-[200px] w-full' />
                                                     <h2 className='absolute top-0 left-0 grid place-items-center h-full w-full bg-[rgba(0,0,0,0.2)] text-4xl text-white'><span>#Best</span></h2>
                                                 </Link>
                                                 <Link href={"/tricks"} className='relative'>
-                                                    <Image src={tireR} alt='review image' width={200} height={200} className='h-[200px] w-full' />
+                                                    <Image src={tireR} alt='review image' width={200} height={200} className='h-[100px] md:h-[200px] w-full' />
                                                     <h2 className='absolute top-0 left-0 grid place-items-center h-full w-full bg-[rgba(0,0,0,0.2)] text-4xl text-white'><span>#Learn</span></h2>
                                                 </Link>
                                             </div>
