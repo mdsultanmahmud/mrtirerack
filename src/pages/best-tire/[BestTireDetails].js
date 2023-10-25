@@ -20,6 +20,7 @@ const BestTireDetailsPage = ({ tire, allComments }) => {
             message,
             blogId: _id,
             time: formattedDate,
+            timeIndexing: date.getTime(),
             status: false,
             category: tireCate,
             title: mainHeading

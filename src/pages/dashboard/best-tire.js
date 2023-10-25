@@ -3,6 +3,7 @@ import DashboardLayout from '@/components/layout/DashboardLayout';
 import Head from 'next/head';
 import Image from 'next/image';
 import React, { useEffect, useRef, useState } from 'react';
+import toast from 'react-hot-toast';
 import { BsImageFill } from 'react-icons/bs'
 const BestTireDashboard = ({ allBestTires }) => {
     const [inputList, setInputList] = useState([{ title: "", details: "", img: "" }])
@@ -30,8 +31,9 @@ const BestTireDashboard = ({ allBestTires }) => {
             inputList,
             date: formattedDate,
             authorName: "Md. Ashikur Rahman",
+            timeIndexing: date.getTime(),
             tireCate: "Best Tire",
-            bloggerImg: "https://res.cloudinary.com/dtdlizh8h/image/upload/v1697628087/blogger_jb7inv.png"
+            bloggerImg: "https://res.cloudinary.com/dtdlizh8h/image/upload/v1698240106/BloggerOne_s1j2lo.jpg"
         }
         if (!bestTire) {
             return
@@ -51,10 +53,15 @@ const BestTireDashboard = ({ allBestTires }) => {
             })
             .then((data) => {
                 console.log("data post successfully!")
+                toast.success("Blog is Posted!!")
+                setInputList([{ title: "", details: "", img: "" }])
+                setMainHeading("")
+                setShortDetails("")
 
             })
             .catch((error) => {
                 console.log(error)
+                toast.success("Blog is not Posted!!")
             });
 
 
@@ -148,7 +155,7 @@ const BestTireDashboard = ({ allBestTires }) => {
                         </div>
                         <div className='mb-4 flex flex-col gap-y-1'>
                             <label htmlFor='shortDetails' className='text-white text-sm'>Add a Short Details <span className='text-red-500'>*</span></label>
-                            <textarea value={shortDetails} onChange={(e) => setShortDetails(e.target.value)} name='shortDetails' className=' px-4 py-2 border border-white bg-transparent outline-none text-white rounded-lg' id='shortDetails' type='text' placeholder='add a short details' required />
+                            <textarea value={shortDetails} onChange={(e) => setShortDetails(e.target.value)} name='shortDetails' className='min-h-[300px]  px-4 py-2 border border-white bg-transparent outline-none text-white rounded-lg' id='shortDetails' type='text' placeholder='add a short details' required />
                         </div>
                         <div className='mb-4 flex items-center justify-between'>
                             <div>
@@ -174,7 +181,7 @@ const BestTireDashboard = ({ allBestTires }) => {
                                         </div>
                                         <div className='mb-4 flex flex-col gap-y-1'>
                                             <label htmlFor='details' className='text-white text-sm'>Add specific Tire Details <span className='text-red-500'>*</span></label>
-                                            <textarea className=' px-4 py-2 border border-white bg-transparent outline-none text-white rounded-lg' id='details' name='details' type='text' placeholder='add a short details' onChange={(e) => handleInputChange(e, i)} required />
+                                            <textarea className='min-h-[300px] px-4 py-2 border border-white bg-transparent outline-none text-white rounded-lg' id='details' name='details' type='text' placeholder='add a short details' onChange={(e) => handleInputChange(e, i)} required />
                                         </div>
                                         <div className='mb-4'>
                                             <label htmlFor='tireImg' className='text-white text-sm flex gap-x-2 items-center  cursor-pointer'><span>Upload an Image</span> <BsImageFill size={22} className='text-white' /></label>

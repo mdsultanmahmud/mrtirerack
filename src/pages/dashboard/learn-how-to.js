@@ -1,20 +1,204 @@
+import Loader from '@/components/common/Loader';
+import BlogTable from '@/components/dashboard/BlogTable';
 import DashboardLayout from '@/components/layout/DashboardLayout';
-import React from 'react';
+import Head from 'next/head';
+import React, { useState } from 'react';
+import toast from 'react-hot-toast';
+import { BsImageFill } from 'react-icons/bs'
+const LearnAndHowToDashboard = ({ allBlogs }) => {
+    const [mainHeading, setMainHeading] = useState('')
+    const [shortDetails, setShortDetails] = useState('')
+    const [mainImgUrl, setMainImageUrl] = useState('')
+    const [content, setContent] = useState('')
+    const [selectedImage, setSelectedImage] = useState(null);
+    const [loading, setLoading] = useState(false)
+    const handleUploadBlog = async (e) => {
+        e.preventDefault()
+        setLoading(true)
+        try {
+            await imgUpload()
+            const date = new Date(); // Assuming you want to format this specific date
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            const formattedDate = new Intl.DateTimeFormat('en-US', options).format(date);
+            const learnAndHowToBlog = {
+                mainHeading,
+                shortDetails,
+                mainImgUrl,
+                content,
+                date: formattedDate,
+                authorName: "Md. Ashikur Rahman",
+                timeIndexing: date.getTime(),
+                tireCate: "Learn & How To",
+                bloggerImg: "https://res.cloudinary.com/dtdlizh8h/image/upload/v1698240106/BloggerOne_s1j2lo.jpg"
+            }
+            if (!learnAndHowToBlog) {
+                return
+            }
 
-const LearnAndHowToDashboard = () => {
+            console.log(learnAndHowToBlog)
+            fetch("http://localhost:5000/api/v1/learn_how", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(learnAndHowToBlog)
+            })
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then((data) => {
+                    console.log("data post successfully!")
+                    toast.success("Blog Posted successfully!!")
+                    setMainHeading("")
+                    setShortDetails("")
+                    setContent("")
+                    setLoading(false)
+
+                })
+                .catch((error) => {
+                    console.log(error)
+                    toast.success("Blog is not Posted!!")
+                });
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const imgUpload = async () => {
+        if (!selectedImage) {
+            return;
+        }
+        console.log("imag is uploading", selectedImage)
+        try {
+            const cloudName = 'dtdlizh8h'
+            const unsignedUploadPreset = "mrtirerack"
+            const formData = new FormData();
+            formData.append('file', selectedImage);
+            formData.append('upload_preset', unsignedUploadPreset);
+
+            // Make a POST request to Cloudinary's upload endpoint
+            const response = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {
+                method: 'POST',
+                body: formData,
+            });
+            if (response.ok) {
+                const data = await response.json();
+                console.log("image url", data.secure_url)
+                setMainImageUrl(data.secure_url)
+
+            } else {
+                console.error('Image upload failed.');
+            }
+        } catch (error) {
+            console.error('Error uploading image:', error);
+        }
+    }
+
+    const handleDeleteItem = id => {
+        const url = "http://localhost:5000/api/v1/learn_how";
+        fetch(`${url}/${id}`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+            .then((response) => {
+                if (response.ok) {
+                    toast.success("Item deleted successfully.");
+                } else {
+                    toast.error("Failed to delete item.");
+                }
+            })
+            .catch((error) => {
+                console.error("Error:", error);
+            });
+
+    }
+    if (loading) {
+        return <Loader />
+    }
     return (
         <div>
-            <h1>This is the dashboard of learn and how to page</h1>
-            <p className='text-justify'>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).</p>
-            <p className='text-justify'>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).</p>
+            <Head>
+                <title>Best Tire Upload || MR Tire Rack</title>
+                <meta name='Best-Tire-Upload' description="description of this page" />
+            </Head>
+            <div >
+                <h1 className='text-center text-3xl mb-8 font-semibold capitalize'>Upload Your Blog</h1>
+                <div className=' mx-auto bg-green-800 shadow-2xl rounded-lg p-8'>
+                    <form onSubmit={handleUploadBlog}>
+                        <div className='mb-4 flex flex-col gap-y-1'>
+                            <label htmlFor='mainHeading' className='text-white text-sm'>Add a Main Heading <span className='text-red-500'>*</span></label>
+                            <input value={mainHeading} onChange={(e) => setMainHeading(e.target.value)} name='mainHeading' className=' px-4 py-2 border border-white bg-transparent outline-none text-white rounded-lg' id='mainHeading' type='text' placeholder='add a main heading' required />
+                        </div>
+                        <div className='mb-4 flex flex-col gap-y-1'>
+                            <label htmlFor='shortDetails' className='text-white text-sm'>Add a Short Details <span className='text-red-500'>*</span></label>
+                            <textarea value={shortDetails} onChange={(e) => setShortDetails(e.target.value)} name='shortDetails' className='min-h-[150px] px-4 py-2 border border-white bg-transparent outline-none text-white rounded-lg' id='shortDetails' type='text' placeholder='add a short details' required />
+                        </div>
+                        <div className='mb-4 flex flex-col gap-y-1'>
+                            <label htmlFor='shortDetails' className='text-white text-sm'>Content<span className='text-red-500'>*</span></label>
+                            <textarea value={content} onChange={(e) => setContent(e.target.value)} name='content' className='min-h-[250px] px-4 py-2 border border-white bg-transparent outline-none text-white rounded-lg' id='shortDetails' type='text' placeholder='add a short details' required />
+                        </div>
+                        <div className='mb-4'>
+                            <div>
+                                <label htmlFor='mainImage' className='text-white text-sm flex gap-x-2 items-center  cursor-pointer'><span>Upload an Image</span> <BsImageFill size={22} className='text-white' /></label>
+                                <input onChange={e => setSelectedImage(e.target.files[0])} name='mainImage' className='text-white' id='mainImage' type='file' placeholder='upload an image about this' required />
+                            </div>
+                        </div>
+                        <button type='submit' className='block mx-auto px-4 py-2 bg-black text-white hover:bg-red-500 transition duration-300 uppercase text-sm mt-5'>Upload Blog</button>
+                    </form>
+                </div>
+            </div>
+            <div className='mt-12'>
+                <h4 className='font-semibold text-lg mt-8'>Our All Best Tires</h4>
+                <div className="overflow-x-auto">
+                    <table className="table">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Category</th>
+                                <th>Date</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {allBlogs?.map((blog) => <tr key={blog?._id}>
+                                <th>{blog?.mainHeading}</th>
+                                <td>{blog?.tireCate}</td>
+                                <td>{blog?.date}</td>
+                                <td className='cursor-pointer text-red-500' onClick={() => handleDeleteItem(blog?._id)}>Delete</td>
+                            </tr>)}
+
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
         </div>
     );
 };
 
+
 export default LearnAndHowToDashboard;
 
-LearnAndHowToDashboard.getLayout = function getLayout(page){
+LearnAndHowToDashboard.getLayout = function getLayout(page) {
     return (
         <DashboardLayout>{page}</DashboardLayout>
     )
+}
+
+
+export const getStaticProps = async () => {
+    const res = await fetch("http://localhost:5000/api/v1/learn_how")
+    const data = await res.json()
+    return {
+        props: {
+            allBlogs: data.data
+        },
+        revalidate: 10
+    }
 }

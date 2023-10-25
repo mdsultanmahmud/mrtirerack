@@ -17,7 +17,7 @@ const BestTiresPage = (props) => {
                                 <h2 className='text-2xl md:text-[2rem] font-semibold'>{blog?.mainHeading}</h2>
                                 <p className='mb-4 text-gray-800 text-lg'>{blog?.date} by <span className='text-green-500 font-semibold'>{blog?.authorName}</span></p>
                                 <p className='text-lg text-gray-800 text-justify'>{blog?.shortDetails?.slice(0,400)}...</p>
-                                <Link href={`/best-tire/${blog?._id}`}><button className='text-green-500 text-xl mt-2'>Details</button></Link>
+                                <Link href={`/best-tire/${blog?._id}`}><button className='text-green-500 text-xl mt-2'>Read More...</button></Link>
                             </div>  
                         </div>)
                     }
