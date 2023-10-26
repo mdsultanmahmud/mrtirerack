@@ -7,10 +7,10 @@ const ShowBlog = ({ blogItem }) => {
     const { mainHeading, date, bloggerImg, mainImgUrl, _id, tireCate, authorName } = blogItem
     return (
         <div className='relative rounded-lg shadow-xl hover:shadow-2xl transition duration-500 cursor-pointer bg-white h-[400px]' onClick={() => {
-            console.log("hello world")
-            console.log(tireCate)
             if(tireCate == "Best Tire"){
                 router.push(`/best-tire/${_id}`)
+            } else if (tireCate == "Learn & How To"){
+                router.push(`/tricks/${_id}`)
             }
         }}>
             <div className='relative'>

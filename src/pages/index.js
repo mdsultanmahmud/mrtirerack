@@ -8,7 +8,7 @@ import BestTire from '@/components/home/BestTire'
 import TireReview from '@/components/home/TireReview'
 const inter = Inter({ subsets: ['latin'] })
 
-export default function HomePage({allBestTires}) {
+export default function HomePage({allBestTires, learnBlogs}) {
   return (
     <>
       <Head>
@@ -17,9 +17,10 @@ export default function HomePage({allBestTires}) {
       </Head>
       <div>
         <Banner />
-        <LearnAndHow />
+        
+        {learnBlogs?.length > 0 && <LearnAndHow blogs = {learnBlogs}/>}
         {/* <TireReview /> */}
-        {allBestTires.length > 0 && <BestTire allBestTires = {allBestTires}/>}
+        {allBestTires?.length > 0 && <BestTire allBestTires = {allBestTires}/>}
       </div>
     </>
   )
@@ -35,9 +36,12 @@ HomePage.getLayout = function getLayout(page) {
 export const getStaticProps = async () => {
   const res = await fetch("http://localhost:5000/api/v1/best_tire")
   const bestTires = await res.json()
+  const data = await fetch("http://localhost:5000/api/v1/learn_how")
+  const learnsBlog = await data.json()
   return {
       props: {
           allBestTires: bestTires.data,
+          learnBlogs: learnsBlog.data
       },
       revalidate: 10
   }
