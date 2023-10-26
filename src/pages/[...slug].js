@@ -1,5 +1,5 @@
 import RootLayout from '@/components/layout/RootLayout';
-import SlugBestTire from '@/components/slug/SlugBestTire';
+import ShowSlugData from '@/components/slug/ShowSlugData';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 const SearchDetailsPage = () => {
@@ -20,7 +20,7 @@ const SearchDetailsPage = () => {
                 !blog ?
                     <h1 className='mt-12 text-center text-2xl text-red-500'>There is no search result!!</h1>
                     :
-                    <SlugBestTire blog={blog} />
+                    <ShowSlugData blog={blog} />
             }
         </div>
     );

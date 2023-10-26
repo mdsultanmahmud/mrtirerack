@@ -63,6 +63,7 @@ const UserComment = ({ comments }) => {
                                         <th>Category</th>
                                         <th>Title</th>
                                         <th>Comments</th>
+                                        <th>Date</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -72,10 +73,10 @@ const UserComment = ({ comments }) => {
                                             <th>{comment?.category}</th>
                                             <td>{comment?.title}</td>
                                             <td>{comment?.message}</td>
+                                            <td>{comment?.time}</td>
                                             <td className='flex items-center gap-x-2'>
                                                 <FcApprove size={30} onClick={() => handleApprovvedComment(comment._id)} className='cursor-pointer text-green-500' />
                                                 <AiFillDelete size={30} onClick={() => handleDeleteComment(comment._id)} className='cursor-pointer text-red-500' />
-
                                             </td>
                                         </tr>)
                                     }

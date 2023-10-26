@@ -15,15 +15,16 @@ const LearnAndHowToDashboard = ({ allBlogs }) => {
     const handleUploadBlog = async (e) => {
         e.preventDefault()
         setLoading(true)
+
         try {
-            await imgUpload()
+          const imageUrl =  await imgUpload()
             const date = new Date(); // Assuming you want to format this specific date
             const options = { year: 'numeric', month: 'long', day: 'numeric' };
             const formattedDate = new Intl.DateTimeFormat('en-US', options).format(date);
             const learnAndHowToBlog = {
                 mainHeading,
                 shortDetails,
-                mainImgUrl,
+                mainImgUrl: imageUrl,
                 content,
                 date: formattedDate,
                 authorName: "Md. Ashikur Rahman",
@@ -34,8 +35,6 @@ const LearnAndHowToDashboard = ({ allBlogs }) => {
             if (!learnAndHowToBlog) {
                 return
             }
-
-            console.log(learnAndHowToBlog)
             fetch("http://localhost:5000/api/v1/learn_how", {
                 method: 'POST',
                 headers: {
@@ -61,6 +60,7 @@ const LearnAndHowToDashboard = ({ allBlogs }) => {
                 .catch((error) => {
                     console.log(error)
                     toast.success("Blog is not Posted!!")
+                    setLoading(false)
                 });
 
         } catch (error) {
@@ -69,6 +69,7 @@ const LearnAndHowToDashboard = ({ allBlogs }) => {
     }
 
     const imgUpload = async () => {
+        let img 
         if (!selectedImage) {
             return;
         }
@@ -89,6 +90,8 @@ const LearnAndHowToDashboard = ({ allBlogs }) => {
                 const data = await response.json();
                 console.log("image url", data.secure_url)
                 setMainImageUrl(data.secure_url)
+                img = data.secure_url
+                return img 
 
             } else {
                 console.error('Image upload failed.');

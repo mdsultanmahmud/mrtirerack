@@ -1,13 +1,50 @@
-import { useRouter } from 'next/router';
-import React from 'react';
+import Comment from '@/components/common/Comment';
+import ShowTricksCom from '@/components/common/ShowTricksCom';
+import RootLayout from '@/components/layout/RootLayout';
+import Head from 'next/head';
 
-const BlogDetails = () => {
-    const router = useRouter()
+const LearnAndHowBlogDetailsPage = ({ blog }) => {
     return (
-        <div>
-            <h1>This is our {router.query.tricksDetails} tricks details post!!</h1>
+        <div className="mainContainer px-4">
+            <Head>
+                <title>{blog?.mainHeading} - MR Tire Rack</title>
+                <meta name="description" content={`Details about ${blog?.mainHeading}. Read this informative article about ${blog?.mainHeading}.`} />
+            </Head>
+            {blog && <ShowTricksCom blog={blog} />}
+            {blog && <Comment blog={blog} />}
         </div>
     );
 };
 
-export default BlogDetails;
+export default LearnAndHowBlogDetailsPage;
+
+LearnAndHowBlogDetailsPage.getLayout = function getLayout(page) {
+    return (
+        <RootLayout>{page}</RootLayout>
+    )
+}
+
+// dynamic data fetching 
+
+export const getStaticPaths = async () => {
+    const res = await fetch("http://localhost:5000/api/v1/learn_how")
+    const blogs = await res.json()
+    const paths = blogs?.data?.map((blog) => ({
+        params: { tricksDetails: blog?._id },
+    }))
+    return { paths, fallback: false }
+}
+
+export const getStaticProps = async (context) => {
+    const { params } = context
+    const res = await fetch(`http://localhost:5000/api/v1/learn_how/${params.tricksDetails}`)
+    const blog = await res.json()
+    console.log(blog)
+
+    return {
+        props: {
+            blog: blog.data
+        },
+        revalidate: 10
+    }
+}
