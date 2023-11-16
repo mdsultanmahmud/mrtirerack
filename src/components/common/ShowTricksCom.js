@@ -1,7 +1,8 @@
 import Image from "next/image";
 import parse from "html-react-parser";
 const ShowTricksCom = ({ blog }) => {
-  const { mainHeading, content, mainImgUrl, shortDetails, authorName } = blog;
+  const { mainHeading, content, mainImgUrl, shortDetails, authorName, date } =
+    blog;
   return (
     <div>
       <h1 className="text-[1.5rem] md:text-[2rem]  uppercase font-semibold mt-8">
@@ -9,6 +10,7 @@ const ShowTricksCom = ({ blog }) => {
       </h1>
       <p className="text-lg text-gray-700 font-semibold">
         By <span className="text-green-500">{authorName}</span>
+        <span className="text-gray-500 ml-2">|| {date}</span>
       </p>
       <div className="my-12 text-justify text-lg">
         <strong>Details:</strong>
@@ -27,11 +29,6 @@ const ShowTricksCom = ({ blog }) => {
       />
       <div className="my-12 text-justify text-lg">
         <strong>Content:</strong>
-        {/* {content?.split("\n").map((paragraph, index) => (
-          <p key={index} className="mt-2">
-            {paragraph}
-          </p>
-        ))} */}
         {parse(content)}
       </div>
     </div>

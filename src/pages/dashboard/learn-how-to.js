@@ -14,7 +14,6 @@ const LearnAndHowToDashboard = ({ allBlogs }) => {
   const [metaTitle, setMetaTitle] = useState("");
   const [metaDescription, setmetaDescription] = useState("");
   const [shortDetails, setShortDetails] = useState("");
-  const [mainImgUrl, setMainImageUrl] = useState("");
   const editor = useRef(null);
   const [content, setContent] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
@@ -105,7 +104,6 @@ const LearnAndHowToDashboard = ({ allBlogs }) => {
       if (response.ok) {
         const data = await response.json();
         console.log("image url", data.secure_url);
-        setMainImageUrl(data.secure_url);
         img = data.secure_url;
         return img;
       } else {
@@ -146,7 +144,7 @@ const LearnAndHowToDashboard = ({ allBlogs }) => {
       </Head>
       <div>
         <h1 className="text-center text-3xl mb-8 font-semibold capitalize">
-          Upload Your Blog
+          Upload Your Blog(learn & how to)
         </h1>
         <div className="mx-auto bg-white shadow-2xl rounded-lg p-8">
           <form onSubmit={handleUploadBlog}>

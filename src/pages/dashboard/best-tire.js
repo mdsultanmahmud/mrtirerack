@@ -1,75 +1,82 @@
-import BlogTable from "@/components/dashboard/BlogTable";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import Head from "next/head";
-import Image from "next/image";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { BsImageFill } from "react-icons/bs";
+import dynamic from "next/dynamic";
+const JoditEditor = dynamic(() => import("jodit-react"), { ssr: false });
 const BestTireDashboard = ({ allBestTires }) => {
-  const [inputList, setInputList] = useState([
-    { title: "", details: "", img: "" },
-  ]);
   const [mainHeading, setMainHeading] = useState("");
+  const [metaTitle, setMetaTitle] = useState("");
+  const [metaDescription, setmetaDescription] = useState("");
   const [shortDetails, setShortDetails] = useState("");
-  const [mainImgUrl, setMainImageUrl] = useState(null);
+  const editor = useRef(null);
+  const [content, setContent] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
-  const [subItem, setSubItem] = useState(false);
-  const [addItem, setAddItem] = useState(false);
-  const handleInputChange = (e, index) => {
-    const { name, value } = e.target;
-    const list = [...inputList];
-    list[index][name] = value;
-    setInputList(list);
-  };
+  const [loading, setLoading] = useState(false);
   const handleUploadBestTire = async (e) => {
     e.preventDefault();
-    const date = new Date(); // Assuming you want to format this specific date
-    const options = { year: "numeric", month: "long", day: "numeric" };
-    const formattedDate = new Intl.DateTimeFormat("en-US", options).format(
-      date
-    );
-    const bestTire = {
-      mainHeading,
-      shortDetails,
-      mainImgUrl,
-      inputList,
-      date: formattedDate,
-      authorName: "Md. Ashikur Rahman",
-      timeIndexing: date.getTime(),
-      tireCate: "Best Tire",
-      bloggerImg:
-        "https://res.cloudinary.com/dtdlizh8h/image/upload/v1698240106/BloggerOne_s1j2lo.jpg",
-    };
-    if (!bestTire) {
-      return;
+    setLoading(true);
+    try {
+      const imageUrl = await imgUpload();
+      const date = new Date(); // Assuming you want to format this specific date
+      const options = { year: "numeric", month: "long", day: "numeric" };
+      const formattedDate = new Intl.DateTimeFormat("en-US", options).format(
+        date
+      );
+      const uploededBestTire = {
+        metaTitle,
+        metaDescription,
+        mainHeading,
+        shortDetails,
+        mainImgUrl: imageUrl,
+        content,
+        date: formattedDate,
+        authorName: "Md. Ashikur Rahman",
+        timeIndexing: date.getTime(),
+        tireCate: "Best Tire",
+        bloggerImg:
+          "https://res.cloudinary.com/dtdlizh8h/image/upload/v1698240106/BloggerOne_s1j2lo.jpg",
+      };
+      console.log(uploededBestTire);
+      if (!uploededBestTire) {
+        return;
+      }
+      fetch("http://localhost:5000/api/v1/best_tire", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(uploededBestTire),
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+          return response.json();
+        })
+        .then((data) => {
+          console.log("data post successfully!");
+          toast.success("Blog Posted successfully!!");
+          setMainHeading("");
+          setShortDetails("");
+          setContent("");
+          setMetaTitle("");
+          setmetaDescription("");
+          setLoading(false);
+        })
+        .catch((error) => {
+          console.log(error);
+          toast.success("Blog is not Posted!!");
+          setLoading(false);
+        });
+    } catch (error) {
+      console.log(error);
     }
-    fetch("http://localhost:5000/api/v1/best_tire", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(bestTire),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        return response.json();
-      })
-      .then((data) => {
-        console.log("data post successfully!");
-        toast.success("Blog is Posted!!");
-        setInputList([{ title: "", details: "", img: "" }]);
-        setMainHeading("");
-        setShortDetails("");
-      })
-      .catch((error) => {
-        console.log(error);
-        toast.success("Blog is not Posted!!");
-      });
   };
 
-  const imgUpload = async (text, index) => {
+  const imgUpload = async () => {
+    let img;
     if (!selectedImage) {
       return;
     }
@@ -80,7 +87,6 @@ const BestTireDashboard = ({ allBestTires }) => {
       const formData = new FormData();
       formData.append("file", selectedImage);
       formData.append("upload_preset", unsignedUploadPreset);
-
       // Make a POST request to Cloudinary's upload endpoint
       const response = await fetch(
         `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
@@ -91,38 +97,14 @@ const BestTireDashboard = ({ allBestTires }) => {
       );
       if (response.ok) {
         const data = await response.json();
-        console.log("image url", data.secure_url);
-        if (text == "mainImg") {
-          setMainImageUrl(data.secure_url);
-        } else if (text == "sub-items") {
-          console.log(
-            `here are the img url is ${data.secure_url}, the index is ${index}}`
-          );
-          console.log(inputList[index]);
-          inputList[index].img = data.secure_url;
-          console.log(inputList);
-        }
+        img = data.secure_url;
+        return img;
       } else {
         console.error("Image upload failed.");
       }
     } catch (error) {
       console.error("Error uploading image:", error);
     }
-  };
-
-  const handleAddItem = async (index) => {
-    try {
-      const updatedList = [...inputList];
-      setInputList([...updatedList, { title: "", details: "", img: null }]);
-    } catch (error) {
-      console.error("Error uploading image:", error);
-    }
-    setAddItem(false);
-  };
-
-  const handleUpload = async (index) => {
-    await imgUpload("sub-items", index);
-    setAddItem(true);
   };
 
   const handleDeleteItem = (id) => {
@@ -152,19 +134,22 @@ const BestTireDashboard = ({ allBestTires }) => {
       </Head>
       <div>
         <h1 className="text-center text-3xl mb-8 font-semibold capitalize">
-          Upload Your Best Tire
+          Upload Your Blog(best tire)
         </h1>
-        <div className=" mx-auto bg-green-800 shadow-2xl rounded-lg p-8">
+        <div className="mx-auto bg-white shadow-2xl rounded-lg p-8">
           <form onSubmit={handleUploadBestTire}>
             <div className="mb-4 flex flex-col gap-y-1">
-              <label htmlFor="mainHeading" className="text-white text-sm">
+              <label
+                htmlFor="mainHeading"
+                className="font-semibold text-green-600 text-lg"
+              >
                 Add a Main Heading <span className="text-red-500">*</span>
               </label>
               <input
                 value={mainHeading}
                 onChange={(e) => setMainHeading(e.target.value)}
                 name="mainHeading"
-                className=" px-4 py-2 border border-white bg-transparent outline-none text-white rounded-lg"
+                className=" px-4 py-2 border border-green-600 bg-transparent outline-none  rounded-lg"
                 id="mainHeading"
                 type="text"
                 placeholder="add a main heading"
@@ -172,139 +157,98 @@ const BestTireDashboard = ({ allBestTires }) => {
               />
             </div>
             <div className="mb-4 flex flex-col gap-y-1">
-              <label htmlFor="shortDetails" className="text-white text-sm">
+              <label
+                htmlFor="shortDetails"
+                className="font-semibold text-green-600 text-lg"
+              >
                 Add a Short Details <span className="text-red-500">*</span>
               </label>
               <textarea
                 value={shortDetails}
                 onChange={(e) => setShortDetails(e.target.value)}
                 name="shortDetails"
-                className="min-h-[300px]  px-4 py-2 border border-white bg-transparent outline-none text-white rounded-lg"
+                className="min-h-[150px] px-4 py-2 border border-green-600 bg-transparent outline-none  rounded-lg"
                 id="shortDetails"
                 type="text"
                 placeholder="add a short details"
                 required
               />
             </div>
-            <div className="mb-4 flex items-center justify-between">
+            <div className="mb-4 flex flex-col gap-y-1">
+              <label
+                htmlFor="shortDetails"
+                className="font-semibold text-green-600 text-lg"
+              >
+                Content<span className="text-red-500">*</span>
+              </label>
+              <JoditEditor
+                ref={editor}
+                value={content}
+                onChange={(newContent) => setContent(newContent)}
+              />
+            </div>
+            <div className="mb-4 ">
               <div>
                 <label
                   htmlFor="mainImage"
-                  className="text-white text-sm flex gap-x-2 items-center  cursor-pointer"
+                  className=" text-sm flex gap-x-2 items-center  cursor-pointer mb-2 text-green-600 font-semibold text-lg"
                 >
                   <span>Upload an Image</span>{" "}
-                  <BsImageFill size={22} className="text-white" />
+                  <BsImageFill size={22} className="" />
                 </label>
                 <input
                   onChange={(e) => setSelectedImage(e.target.files[0])}
                   name="mainImage"
-                  className="text-white"
+                  className=""
                   id="mainImage"
                   type="file"
                   placeholder="upload an image about this"
                   required
                 />
               </div>
-              {!subItem && (
-                <button
-                  onClick={() => {
-                    setSubItem(true);
-                    imgUpload("mainImg");
-                  }}
-                  className="p-2 bg-black text-white hover:bg-red-500 transition duration-300 lowercase text-sm"
-                >
-                  Add Sub-item
-                </button>
-              )}
             </div>
-
-            {/* upload specific items here  */}
-            <hr />
-            {subItem && (
-              <div className="mt-8">
-                {inputList.map((inp, i) => (
-                  <div key={i}>
-                    <div className="mb-4 flex flex-col gap-y-1">
-                      <label htmlFor="title" className="text-white text-sm">
-                        Add specific tire Heading{" "}
-                        <span className="text-red-500">*</span>
-                      </label>
-                      <input
-                        className="px-4 py-2 border border-white bg-transparent outline-none text-white rounded-lg"
-                        id="title"
-                        name="title"
-                        type="text"
-                        placeholder="add a main heading"
-                        onChange={(e) => handleInputChange(e, i)}
-                        required
-                      />
-                    </div>
-                    <div className="mb-4 flex flex-col gap-y-1">
-                      <label htmlFor="details" className="text-white text-sm">
-                        Add specific Tire Details{" "}
-                        <span className="text-red-500">*</span>
-                      </label>
-                      <textarea
-                        className="min-h-[300px] px-4 py-2 border border-white bg-transparent outline-none text-white rounded-lg"
-                        id="details"
-                        name="details"
-                        type="text"
-                        placeholder="add a short details"
-                        onChange={(e) => handleInputChange(e, i)}
-                        required
-                      />
-                    </div>
-                    <div className="mb-4">
-                      <label
-                        htmlFor="tireImg"
-                        className="text-white text-sm flex gap-x-2 items-center  cursor-pointer"
-                      >
-                        <span>Upload an Image</span>{" "}
-                        <BsImageFill size={22} className="text-white" />
-                      </label>
-                      <input
-                        onChange={(e) => setSelectedImage(e.target.files[0])}
-                        className="text-white"
-                        name="file"
-                        type="file"
-                        id="tireImg"
-                        placeholder="upload an image about this"
-                        required
-                      />
-                    </div>
-                    <div>
-                      {inputList.length - 1 === i && !addItem && (
-                        <span
-                          className={`text-white text-sm bg-black px-4 py-2 rounded-lg uppercase mr-2 hover:opacity-80 disabled:opacity-50 cursor-pointer`}
-                          onClick={() => handleUpload(i)}
-                          disabled={
-                            inputList[i].title == "" ||
-                            inputList[i].details == ""
-                          }
-                        >
-                          Complete
-                        </span>
-                      )}
-                      {inputList.length - 1 === i && addItem && (
-                        <span
-                          className={`text-white text-sm bg-black px-4 py-2 rounded-lg uppercase mr-2 hover:opacity-80 disabled:opacity-50 cursor-pointer`}
-                          onClick={() => handleAddItem(i)}
-                        >
-                          Add More
-                        </span>
-                      )}
-                      {/* {
-                                            inputList.length !== 1 &&
-                                            <button className='text-white text-sm bg-black px-4 py-2 rounded-lg uppercase hover:opacity-80' onClick={() => handleRemoveItem(i)}>Remove Item</button>
-                                        } */}
-                    </div>
-                  </div>
-                ))}
+            <div className="my-12">
+              <h4 className=" font-semibold text-2xl mb-4">Meta Section</h4>
+              <div className="mb-4 flex flex-col gap-y-1">
+                <label
+                  htmlFor="mainHeading"
+                  className="font-semibold text-green-600 text-lg"
+                >
+                  Meta Title
+                </label>
+                <input
+                  value={metaTitle}
+                  onChange={(e) => setMetaTitle(e.target.value)}
+                  name="metaTitle"
+                  className=" px-4 py-2 border border-green-600 bg-transparent outline-none  rounded-lg"
+                  id="metaTitle"
+                  type="text"
+                  placeholder="meta title..."
+                  required
+                />
               </div>
-            )}
+              <div className="mb-4 flex flex-col gap-y-1">
+                <label
+                  htmlFor="mainHeading"
+                  className="font-semibold text-green-600 text-lg"
+                >
+                  Meta Description
+                </label>
+                <input
+                  value={metaDescription}
+                  onChange={(e) => setmetaDescription(e.target.value)}
+                  name="metaDescription"
+                  className=" px-4 py-2 border border-green-600 bg-transparent outline-none  rounded-lg"
+                  id="metaDescription"
+                  type="text"
+                  placeholder="meta description..."
+                  required
+                />
+              </div>
+            </div>
             <button
               type="submit"
-              className="block mx-auto px-4 py-2 bg-black text-white hover:bg-red-500 transition duration-300 uppercase text-sm mt-5"
+              className="block mx-auto px-4 py-2 bg-green-600 text-white font-semibold  hover:bg-red-500 transition duration-300 uppercase text-sm mt-5"
             >
               Upload Blog
             </button>
